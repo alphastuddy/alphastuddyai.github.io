@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Alphastuddy AI</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+    #chat { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+    .user { color: blue; }
+    .bot { color: green; }
+  </style>
 </head>
 <body>
-  <h1>Chat con IA Gratis</h1>
-  <div id="chat" style="height:300px; overflow:auto; border:1px solid #ccc; padding:10px;"></div>
-  <input type="text" id="userInput" placeholder="Escribe tu mensaje">
+  <h1>Chat educativo con IA</h1>
+  <div id="chat"></div>
+  <input type="text" id="userInput" placeholder="Escribe tu pregunta">
   <button onclick="sendMessage()">Enviar</button>
 
   <script src="script.js"></script>
