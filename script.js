@@ -1,36 +1,39 @@
-function sendMessage() {
-  const input = document.getElementById('userInput').value;
-  const chat = document.getElementById('chat');
-
-  if(input.trim() === "") return;
+async function sendMessage() {
+  const input = document.getElementById("userInput").value;
+  const chat = document.getElementById("chat");
 
   // Mostrar mensaje del usuario
-  const userMsg = document.createElement('div');
-  userMsg.textContent = "Tú: " + input;
-  userMsg.style.fontWeight = "bold";
-  chat.appendChild(userMsg);
+  const userMessage = document.createElement("div");
+  userMessage.textContent = "Tú: " + input;
+  chat.appendChild(userMessage);
 
   // Limpiar input
-  document.getElementById('userInput').value = "";
+  document.getElementById("userInput").value = "";
 
-  // Simular respuesta de IA
-  const botMsg = document.createElement('div');
-  botMsg.textContent = "IA está escribiendo...";
-  botMsg.style.fontStyle = "italic";
-  chat.appendChild(botMsg);
+  // Llamar al modelo de Hugging Face
+  try {
+    const response = await fetch("https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ inputs: input })
+    });
 
-  // Simular “pensando” antes de responder
-  setTimeout(() => {
-    botMsg.textContent = "IA: " + getResponse(input);
-    chat.scrollTop = chat.scrollHeight; // Auto-scrollea abajo
-  }, 1000);
+    const data = await response.json();
+    const botMessage = document.createElement("div");
+
+    if(data && data[0]?.generated_text) {
+      botMessage.textContent = "IA: " + data[0].generated_text;
+    } else {
+      botMessage.textContent = "IA: Lo siento, no entendí eso.";
+    }
+
+    chat.appendChild(botMessage);
+    chat.scrollTop = chat.scrollHeight;
+  } catch (error) {
+    console.error(error);
+    const botMessage = document.createElement("div");
+    botMessage.textContent = "IA: Ha ocurrido un error. Intenta de nuevo.";
+    chat.appendChild(botMessage);
+  }
 }
 
-// Función que genera respuestas simples
-function getResponse(input) {
-  input = input.toLowerCase();
-  if(input.includes("hola")) return "¡Hola! ¿Cómo estás?";
-  if(input.includes("adiós")) return "¡Adiós! ¡Que tengas un buen día!";
-  if(input.includes("cómo estás")) return "Estoy bien, gracias por preguntar 😊";
-  return "Lo siento, no entendí eso. 🤖";
-}
