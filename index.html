@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>AlphaStudy AI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlphaStudy AI</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+    input { width: 80%; padding: 10px; }
+    button { padding: 10px; }
+  </style>
 </head>
 <body>
-    <h1>Bienvenido a AlphaStudy AI</h1>
-    <p>Aquí tu IA podrá ayudarte a estudiar.</p>
+  <h1>AlphaStudy AI</h1>
+  <div id="chat"></div>
+  <input id="userInput" placeholder="Escribe tu mensaje...">
+  <button onclick="sendMessage()">Enviar</button>
+
+  <script src="script.js"></script>
 </body>
 </html>
