@@ -20,33 +20,24 @@ function appendMessage(sender, text) {
   chatDiv.scrollTop = chatDiv.scrollHeight;
 }
 
+// Base de respuestas educativas
+const knowledgeBase = [
+  { keywords: ["suma", "+", "sumar"], answer: "Para sumar, simplemente sumas los números. Ej: 2 + 3 = 5." },
+  { keywords: ["resta", "-", "restar"], answer: "Para restar, quita el segundo número del primero. Ej: 5 - 2 = 3." },
+  { keywords: ["historia", "guerra", "revolución"], answer: "La historia estudia hechos del pasado. ¿Sobre qué periodo quieres saber?" },
+  { keywords: ["ciencia", "biología", "química"], answer: "La ciencia estudia la naturaleza. La biología estudia los seres vivos y la química las sustancias." },
+  { keywords: ["inglés", "translate", "traduce"], answer: "Puedo ayudarte a traducir palabras o frases simples del inglés al español." }
+];
+
 function getAIResponse(message) {
-  // Mensajes educativos básicos
-  message = message.toLowerCase();
+  const text = message.toLowerCase();
 
-  // Matemáticas
-  if (message.includes("sumar") || message.includes("suma") || message.includes("+")) {
-    return "Para sumar, simplemente sumas los números que tengas. Por ejemplo, 2 + 3 = 5.";
-  }
-  if (message.includes("resta") || message.includes("-")) {
-    return "Para restar, quita el segundo número del primero. Por ejemplo, 5 - 2 = 3.";
-  }
-  
-  // Historia
-  if (message.includes("historia") || message.includes("guerra") || message.includes("revolución")) {
-    return "La historia estudia hechos y eventos del pasado. ¿Quieres que te cuente sobre algún periodo específico?";
+  for (const item of knowledgeBase) {
+    if (item.keywords.some(k => text.includes(k))) {
+      return item.answer;
+    }
   }
 
-  // Ciencias
-  if (message.includes("ciencia") || message.includes("biología") || message.includes("química")) {
-    return "La ciencia estudia la naturaleza y sus fenómenos. Por ejemplo, la biología estudia los seres vivos.";
-  }
-
-  // Inglés básico
-  if (message.includes("inglés") || message.includes("translate") || message.includes("traduce")) {
-    return "Puedo ayudarte a traducir palabras o frases simples del inglés al español.";
-  }
-
-  // Pregunta general
-  return "¡Buena pregunta! Intenta darme más detalles sobre tu duda de colegio o instituto para ayudarte mejor.";
+  // Si no encuentra coincidencia, devuelve respuesta educativa general
+  return "¡Buena pregunta! Trata de ser más específico sobre tu duda de colegio o instituto para ayudarte mejor.";
 }
