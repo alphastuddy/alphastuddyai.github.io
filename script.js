@@ -1,39 +1,52 @@
-async function sendMessage() {
-  const input = document.getElementById("userInput").value;
-  const chat = document.getElementById("chat");
+const chatDiv = document.getElementById('chat');
 
-  // Mostrar mensaje del usuario
-  const userMessage = document.createElement("div");
-  userMessage.textContent = "Tú: " + input;
-  chat.appendChild(userMessage);
+function sendMessage() {
+  const input = document.getElementById('userInput');
+  const message = input.value.trim();
+  if (!message) return;
 
-  // Limpiar input
-  document.getElementById("userInput").value = "";
+  appendMessage('user', message);
+  input.value = '';
 
-  // Llamar al modelo de Hugging Face
-  try {
-    const response = await fetch("https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ inputs: input })
-    });
-
-    const data = await response.json();
-    const botMessage = document.createElement("div");
-
-    if(data && data[0]?.generated_text) {
-      botMessage.textContent = "IA: " + data[0].generated_text;
-    } else {
-      botMessage.textContent = "IA: Lo siento, no entendí eso.";
-    }
-
-    chat.appendChild(botMessage);
-    chat.scrollTop = chat.scrollHeight;
-  } catch (error) {
-    console.error(error);
-    const botMessage = document.createElement("div");
-    botMessage.textContent = "IA: Ha ocurrido un error. Intenta de nuevo.";
-    chat.appendChild(botMessage);
-  }
+  const response = getAIResponse(message);
+  appendMessage('bot', response);
 }
 
+function appendMessage(sender, text) {
+  const p = document.createElement('p');
+  p.className = sender;
+  p.textContent = (sender === 'user' ? "Tú: " : "Alphastuddy AI: ") + text;
+  chatDiv.appendChild(p);
+  chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+function getAIResponse(message) {
+  // Mensajes educativos básicos
+  message = message.toLowerCase();
+
+  // Matemáticas
+  if (message.includes("sumar") || message.includes("suma") || message.includes("+")) {
+    return "Para sumar, simplemente sumas los números que tengas. Por ejemplo, 2 + 3 = 5.";
+  }
+  if (message.includes("resta") || message.includes("-")) {
+    return "Para restar, quita el segundo número del primero. Por ejemplo, 5 - 2 = 3.";
+  }
+  
+  // Historia
+  if (message.includes("historia") || message.includes("guerra") || message.includes("revolución")) {
+    return "La historia estudia hechos y eventos del pasado. ¿Quieres que te cuente sobre algún periodo específico?";
+  }
+
+  // Ciencias
+  if (message.includes("ciencia") || message.includes("biología") || message.includes("química")) {
+    return "La ciencia estudia la naturaleza y sus fenómenos. Por ejemplo, la biología estudia los seres vivos.";
+  }
+
+  // Inglés básico
+  if (message.includes("inglés") || message.includes("translate") || message.includes("traduce")) {
+    return "Puedo ayudarte a traducir palabras o frases simples del inglés al español.";
+  }
+
+  // Pregunta general
+  return "¡Buena pregunta! Intenta darme más detalles sobre tu duda de colegio o instituto para ayudarte mejor.";
+}
